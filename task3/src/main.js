@@ -9,7 +9,6 @@ class SwiperElement extends HTMLElement {
     super()
 
     this.swiperInstance = null
-    this.toggleButton = null
   }
 
   connectedCallback() {
