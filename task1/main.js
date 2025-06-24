@@ -1,5 +1,3 @@
-// Bonus zadatak - custom klasa
-
 class TextImageSection extends HTMLElement {
     constructor() {
         super()
@@ -27,8 +25,6 @@ class TextImageSection extends HTMLElement {
 
         this.observer.observe(this.section)
     }
-
-    // Cleanup nije potreban zato jer se komponenta nikad ne brise iz DOMa
 }
 
 customElements.define("text-image-section", TextImageSection)
