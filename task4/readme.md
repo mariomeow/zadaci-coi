@@ -1,0 +1,1 @@
+Ovo mi je prvi put da koristim Liquid pa ne vjerujem da je bez grešaka / da je optimalno

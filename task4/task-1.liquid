@@ -1,0 +1,210 @@
+<text-image-section>
+  <section class="section section--{{ section.id }}">
+    {% if section.settings.image != blank %}
+      {{ section.settings.image | image_url: width: 1000, height: 1000 | image_tag: class: 'section__image' }}
+    {% endif %}
+    <div class="section__content">
+      <div class="section__inner">
+        {% if section.settings.title != blank %}
+          <h3 class="section__h3">{{ section.settings.title }}</h3>
+        {% endif %}
+        {% if section.settings.content != blank %}
+          <p class="section__p">
+            {{ section.settings.content }}
+          </p>
+          {% if section.settings.hidden != blank and section.settings.button_text != blank %}
+            <p class="section__p section__p--hidden">
+              {{ section.settings.hidden }}
+            </p>
+            <button class="section__button">{{ section.settings.button_text }}</button>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  </section>
+</text-image-section>
+
+{% schema %}
+{
+  "name": "Task 1 Element",
+  "settings": [
+    {
+      "type": "image_picker",
+      "label": "Image",
+      "id": "image"
+    },
+    {
+      "type": "text",
+      "label": "Title",
+      "id": "title"
+    },
+    {
+      "type": "text",
+      "label": "Content",
+      "id": "content"
+    },
+    {
+      "type": "text",
+      "label": "Hidden Content",
+      "id": "hidden"
+    },
+    {
+      "type": "text",
+      "label": "Button Text",
+      "id": "button_text"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+   :root {
+     --line-height: 130%;
+     --theme-color: #e3cfcf;
+   }
+
+    .section--{{ section.id }} * {
+     margin: 0px;
+     padding: 0px;
+   }
+
+   .section--{{ section.id }} {
+     background-color: var(--theme-color);
+     display: grid;
+     grid-template-columns: repeat(2, 1fr);
+     opacity: 1;
+     transition: opacity 0.3s ease-in-out;
+   }
+
+  .section--hidden {
+     opacity: 0;
+   }
+
+   .section__image {
+     width: 100%;
+     height: 100%;
+   }
+
+   .section__content {
+     margin: 0px auto;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     padding: 80px;
+     gap: 24px;
+   }
+
+    .section__button {
+     cursor: pointer;
+     border: 1px solid black;
+     padding: 15px 45px;
+     font-weight: 600;
+     font-size: 14px;
+     line-height: var(--line-height);
+     letter-spacing: 0px;
+     background-color: transparent;
+     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+   }
+
+    .section__button:hover {
+     background-color: black;
+     color: var(--theme-color);
+   }
+
+   .section__inner {
+     display: grid;
+     grid-template-columns: 1fr;
+     gap: 16px;
+   }
+
+    .section__h3 {
+     text-align: center;
+     font-size: 32px;
+     letter-spacing: 0px;
+     font-weight: 275;
+     line-height: var(--line-height);
+     text-transform: uppercase;
+   }
+
+    .section__p {
+     font-weight: 300;
+     font-size: 18px;
+     line-height: var(--line-height);
+     letter-spacing: 0px;
+     text-align: center;
+     transition: opacity 0.3s linear, transform 0.3s linear;
+   }
+
+    .section__p--hidden {
+     height: 0px;
+     overflow: hidden;
+     opacity: 0;
+     transform: translateY(10px);
+   }
+
+   @media only screen and (max-width: 1024px) {
+     .section__h3 {
+       font-size: 24px;
+     }
+
+     .section__p {
+       font-size: 16px;
+     }
+
+      .section__button {
+       font-size: 12px;
+       padding: 15px 20px;
+     }
+   }
+
+   @media only screen and (max-width: 900px) {
+    .section--{{ section.id }} {
+       grid-template-columns: 1fr;
+     }
+
+     .section__content {
+       padding: 70px 15px;
+     }
+   }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!customElements.get('text-image-section')) {
+      class TextImageSection extends HTMLElement {
+        constructor() {
+          super();
+        }
+
+        connectedCallback() {
+          this.section = this.querySelector('.section');
+          this.sectionButton = this.querySelector('.section__button');
+          this.sectionHiddenParagraph = this.querySelector('.section__p--hidden');
+
+          this.sectionButton.addEventListener('click', () => {
+            this.sectionHiddenParagraph.classList.remove('section__p--hidden');
+            this.sectionButton.remove();
+          });
+
+          this.observer = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  entry.target.classList.remove('section--hidden');
+                } else {
+                  entry.target.classList.add('section--hidden');
+                }
+              });
+            },
+            { rootMargin: '0px', threshold: 0.5 }
+          );
+
+          this.observer.observe(this.section);
+        }
+      }
+
+      customElements.define('text-image-section', TextImageSection);
+    }
+  });
+</script>
