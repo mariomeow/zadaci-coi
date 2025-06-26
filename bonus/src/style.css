@@ -1,0 +1,18 @@
+:root {}
+
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+main {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #333;
+}
+
+.canvas {
+    background-color: red;
+}
